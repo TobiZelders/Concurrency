@@ -15,6 +15,11 @@ public class Customer
         return _currentBook;
     }
     // this is the work that the customer does
+
+
+
+    //ADD LOCKS
+    //NOTIFY WHEN BOOK READY
     public void DoWork() // feel free to add code to this method, 
                 //  but DO NOT remove the existing one
                 // do not alter the order of the instructions.
@@ -41,6 +46,6 @@ public class Customer
         _currentBook = null;
 
         Console.WriteLine($"Customer {_id} is leaving the library");
-
+//CW NIET IN LOCK!!!!!!!!!
     }
 }

@@ -5,7 +5,10 @@ namespace booksforall
     internal class Program
     {
         //feel free to change the following values and if needed add variables
-        public static int n_threads = 1000;// feel free to change this value
+        public static int n_threads = 10;// feel free to change this value
+
+        private static List<Thread> CustomerThreads = new List<Thread>();
+        private static List<Thread> ClerkThreads = new List<Thread>();
 
         private static readonly string studentname1 = "Daniel Jong";   //name and surname of the student1
         private static readonly string studentnum1 = "0997226";    //student number
@@ -79,18 +82,30 @@ namespace booksforall
             }
         }
         public static void InitCustomers() // feel free to alter this method if needed
+//INITIEER HIER THREADS
         {
             //init the customers
-
+            for (int i = 0; i < customers.Length; i++){
+                customers[i] = new Customer(i);
+                Thread t = new Thread (() => {customers[i].DoWork(); });
+                CustomerThreads.Add(t);
+            }
         }
         public static void InitClerks() // feel free to alter this method if needed
+//INITIEER HIER THREADS
         {
             //init the clerks
-
+            for (int i = 0; i < clerks.Length; i++){
+                clerks[i] = new Clerk(i);
+                Thread t = new Thread (() => {clerks[i].DoWork(); });
+                ClerkThreads.Add(t);
+            }
         }
         public static void StartClerks() // feel free to alter this method if needed
         {
             //start the clerks
+            for(int i = 0; i < clerks.Length; i++)
+                ClerkThreads.ElementAt(i).Start();
         }
         public static void StartCustomers() // feel free to alter this method if needed
         {
