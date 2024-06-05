@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "cKLeCHcmuaD3FvRhqMOp4Swc9Zn5iVQml5dqD5h64LUO8HwaZzZ3TimAKU7rgUrDBbhxpCGk1lngtEkh69/jfw==",
+  "dgSpecHash": "XTBokcgnfBcim15PPq8wqDRDspYpvtwEvzcih2kVmPXG1RxAYccpRvS2maFO0k6Sf/NqSIlGQ/yqElh3itq0IQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\tobiz\\OneDrive\\Documenten\\GitHub\\Concurrency\\booksforall_student\\booksforall.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\dkbj2\\Documents\\Eigen Documenten\\Studie\\Jaar 2.3\\OP4\\COC assignment\\GitHub\\Concurrency\\booksforall_student\\booksforall.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dkbj2\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.28\\microsoft.netcore.app.ref.6.0.28.nupkg.sha512",
+    "C:\\Users\\dkbj2\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.28\\microsoft.windowsdesktop.app.ref.6.0.28.nupkg.sha512",
+    "C:\\Users\\dkbj2\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.28\\microsoft.aspnetcore.app.ref.6.0.28.nupkg.sha512",
+    "C:\\Users\\dkbj2\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.28\\microsoft.netcore.app.host.win-x64.6.0.28.nupkg.sha512"
+  ],
   "logs": []
 }
