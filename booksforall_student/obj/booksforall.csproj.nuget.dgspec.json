@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tobiz\\Documents\\Github-2024\\Concurrency\\Concurrency\\booksforall_student\\booksforall.csproj": {}
+    "C:\\Users\\tobiz\\Documents\\Github-2024\\Concurrency\\booksforall_student\\booksforall.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tobiz\\Documents\\Github-2024\\Concurrency\\Concurrency\\booksforall_student\\booksforall.csproj": {
+    "C:\\Users\\tobiz\\Documents\\Github-2024\\Concurrency\\booksforall_student\\booksforall.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tobiz\\Documents\\Github-2024\\Concurrency\\Concurrency\\booksforall_student\\booksforall.csproj",
+        "projectUniqueName": "C:\\Users\\tobiz\\Documents\\Github-2024\\Concurrency\\booksforall_student\\booksforall.csproj",
         "projectName": "booksforall",
-        "projectPath": "C:\\Users\\tobiz\\Documents\\Github-2024\\Concurrency\\Concurrency\\booksforall_student\\booksforall.csproj",
+        "projectPath": "C:\\Users\\tobiz\\Documents\\Github-2024\\Concurrency\\booksforall_student\\booksforall.csproj",
         "packagesPath": "C:\\Users\\tobiz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tobiz\\Documents\\Github-2024\\Concurrency\\Concurrency\\booksforall_student\\obj\\",
+        "outputPath": "C:\\Users\\tobiz\\Documents\\Github-2024\\Concurrency\\booksforall_student\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
