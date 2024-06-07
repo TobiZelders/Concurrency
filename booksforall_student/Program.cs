@@ -86,8 +86,9 @@ namespace booksforall
         {
             //init the customers
             for (int i = 0; i < customers.Length; i++){
-                customers[i] = new Customer(i);
-                Thread t = new Thread (() => {customers[i].DoWork(); });
+                int index = i;
+                customers[index] = new Customer(index);
+                Thread t = new Thread (() => {customers[index].DoWork(); });
                 CustomerThreads.Add(t);
             }
         }
@@ -96,8 +97,9 @@ namespace booksforall
         {
             //init the clerks
             for (int i = 0; i < clerks.Length; i++){
-                clerks[i] = new Clerk(i);
-                Thread t = new Thread (() => {clerks[i].DoWork(); });
+                int index = i;
+                clerks[index] = new Clerk(index);
+                Thread t = new Thread (() => {clerks[index].DoWork(); });
                 ClerkThreads.Add(t);
             }
         }

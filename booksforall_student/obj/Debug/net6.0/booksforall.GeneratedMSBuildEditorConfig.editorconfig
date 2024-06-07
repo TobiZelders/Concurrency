@@ -8,4 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = booksforall
-build_property.ProjectDir = C:\Users\dkbj2\Documents\Eigen Documenten\Studie\Jaar 2.3\OP4\COC assignment\GitHub\Concurrency\booksforall_student\
+build_property.ProjectDir = C:\Users\tobiz\Documents\Github-2024\Concurrency\Concurrency\booksforall_student\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 

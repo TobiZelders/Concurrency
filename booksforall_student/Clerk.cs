@@ -87,7 +87,7 @@ public class Clerk
 
         //the clerk will wait for a book in the dropoff
 
-        t_book = Program.dropoff.First();
+        t_book = Program.dropoff.FirstOrDefault();
 
         Program.dropoff.RemoveFirst();
 
