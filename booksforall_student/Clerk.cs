@@ -78,18 +78,22 @@ public class Clerk
         }
         Console.WriteLine($"Clerk [{_id}] putting book [{t_book.BookId}] on the counter");
 
-
+        //LibrarySemaphore.counterSemaphore.Wait();
         Program.counter.AddFirst(t_book);
+        //LibrarySemaphore.counterSemaphore.Release();
         // the clerk will put the book on the counter for the customer
 
         Thread.Sleep(new Random().Next(100, 500));
         //the clerk will take a nap for overworking
 
+        //LibrarySemaphore.dropOffSemaphore.Wait();// SEMAPHOREEEEEEEEEEE
         //the clerk will wait for a book in the dropoff
 
         t_book = Program.dropoff.First();
 
         Program.dropoff.RemoveFirst();
+
+        //LibrarySemaphore.dropOffSemaphore.Release();// SEMAPHOREEEEEEEEEEE
 
         //the clerk will check the book in the records
         Console.WriteLine($"Clerk [{_id}] is checking in the book [{t_book.BookId}] in the records");

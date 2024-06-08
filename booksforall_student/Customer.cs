@@ -23,9 +23,11 @@ public class Customer
         // the customer will come to the library when the book is ready
         // the customer picks up a book that he requested
 
+        //LibrarySemaphore.counterSemaphore.Wait();// SEMAPHOREEEEEEEEEEE
         _currentBook = Program.counter.First();
         
         Program.counter.RemoveFirst();
+        //LibrarySemaphore.counterSemaphore.Release();// SEMAPHOREEEEEEEEEEE
 
         Console.WriteLine($"Customer {_id} is about to read the book {_currentBook.BookId}");
 
@@ -35,8 +37,9 @@ public class Customer
         //the customer will return the book to the dropoff
         Console.WriteLine($"Customer {_id} is dropping off the book {_currentBook.BookId}");
 
-
+        //LibrarySemaphore.dropOffSemaphore.Wait();// SEMAPHOREEEEEEEEEEE
         Program.dropoff.AddFirst(_currentBook);
+        //LibrarySemaphore.dropOffSemaphore.Release();// SEMAPHOREEEEEEEEEEE
 
         _currentBook = null;
 
