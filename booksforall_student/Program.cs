@@ -5,10 +5,12 @@ namespace booksforall
     internal class Program
     {
         //feel free to change the following values and if needed add variables
-        public static int n_threads = 10;// feel free to change this value
+        public static int n_threads = 5;// feel free to change this value
 
         private static List<Thread> CustomerThreads = new List<Thread>();
         private static List<Thread> ClerkThreads = new List<Thread>();
+        public const string recordMutex = "Global\\recordMutex";
+        public const string counterMutex = "Global\\counterMutex";
 
         private static readonly string studentname1 = "Daniel Jong";   //name and surname of the student1
         private static readonly string studentnum1 = "0997226";    //student number

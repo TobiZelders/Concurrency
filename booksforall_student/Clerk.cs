@@ -1,4 +1,3 @@
-
 namespace booksforall;
 public class Clerk
 {
@@ -58,32 +57,43 @@ public class Clerk
     {
         //the clerk will put the book in the counter
         // find an available book, but do not remove it from the original records
-        Console.WriteLine($"Clerk [{_id}] is going to check in the records for a book to put on the counter");
+        //Console.WriteLine($"Clerk [{_id}] is going to check in the records for a book to put on the counter");
 
         Book? t_book = null;
-        
-        foreach (var record in _records)    // the clerk will look in the records
-                                            // for a book that is not yet borrowed
+
+        using (Mutex mutex = new Mutex(false, Program.recordMutex, out bool createdNew))
         {
+//            Console.WriteLine($"CLERK [{_id}] waiting to acquire the record mutex.");
+            mutex.WaitOne();
+            Console.WriteLine($"CLERK [{_id}] entered the record matrix.");
 
-            if (record.IsBorrowed == false)
+            foreach (var record in _records)    // the clerk will look in the records
+                                                // for a book that is not yet borrowed
             {
-                t_book = record.Book;
-                
-                record.IsBorrowed = true;
-                
-                break;
+                System.Console.WriteLine(record.Book.BookId + $"of clerk: {_id}");
+                if (record.IsBorrowed == false){
+                    t_book = record.Book;
+                    record.IsBorrowed = true;
+                    break;      
+                }
             }
-
+            Console.WriteLine($"CLERK [{_id}] releasing the record mutex.");
+            mutex.ReleaseMutex();
         }
-        Console.WriteLine($"Clerk [{_id}] putting book [{t_book.BookId}] on the counter");
+        //Console.WriteLine($"Clerk [{_id}] putting book [{t_book.BookId}] on the counter");
 
-
-        Program.counter.AddFirst(t_book);
-        // the clerk will put the book on the counter for the customer
-
-        Thread.Sleep(new Random().Next(100, 500));
-        //the clerk will take a nap for overworking
+        using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew)){
+            //Console.WriteLine($"CLERK [{_id}] waiting to acquire the counter mutex.");
+            mutex.WaitOne();
+            Console.WriteLine($"CLERK [{_id}] entered the counter matrix.");
+            Program.counter.AddFirst(t_book);
+            // the clerk will put the book on the counter for the customer
+//Thread SLeep in Critical Section???
+            Thread.Sleep(new Random().Next(100, 500));
+            //the clerk will take a nap for overworking
+            Console.WriteLine($"CLERK [{_id}] releasing the counter mutex.");
+            mutex.ReleaseMutex();
+        }        
 
         //the clerk will wait for a book in the dropoff
 
