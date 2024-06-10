@@ -11,6 +11,7 @@ namespace booksforall
         private static List<Thread> ClerkThreads = new List<Thread>();
         public const string recordMutex = "Global\\recordMutex";
         public const string counterMutex = "Global\\counterMutex";
+        public const string dropoffMutex = "Global\\dropoffMutex";
 
         private static readonly string studentname1 = "Daniel Jong";   //name and surname of the student1
         private static readonly string studentnum1 = "0997226";    //student number

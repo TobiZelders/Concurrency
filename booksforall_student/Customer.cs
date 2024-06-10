@@ -26,23 +26,29 @@ public class Customer
     {
 
         // the customer will come to the library when the book is ready
-//GETS SIGNALED
         // the customer picks up a book that he requested
+//GETS SIGNALED
 //CRITICAL SECTION
+    using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
+    {
+        mutex.WaitOne();
         _currentBook = Program.counter.First();
-        
         Program.counter.RemoveFirst();
-
         Console.WriteLine($"Customer {_id} is about to read the book {_currentBook.BookId}");
+        mutex.ReleaseMutex();
+    }
 //EXIT
         // the customer will take the book to read
         Thread.Sleep(new Random().Next(100, 500));
 //CRITICAL SECTION
         //the customer will return the book to the dropoff
+    using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
+    {
+        mutex.WaitOne();
         Console.WriteLine($"Customer {_id} is dropping off the book {_currentBook.BookId}");
-
-
         Program.dropoff.AddFirst(_currentBook);
+        mutex.ReleaseMutex();
+    }
 //EXIT
         _currentBook = null;
 

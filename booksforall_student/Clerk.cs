@@ -60,7 +60,7 @@ public class Clerk
         //Console.WriteLine($"Clerk [{_id}] is going to check in the records for a book to put on the counter");
 
         Book? t_book = null;
-
+//CRITICAL SECTION
         using (Mutex mutex = new Mutex(false, Program.recordMutex, out bool createdNew))
         {
 //            Console.WriteLine($"CLERK [{_id}] waiting to acquire the record mutex.");
@@ -80,9 +80,13 @@ public class Clerk
             Console.WriteLine($"CLERK [{_id}] releasing the record mutex.");
             mutex.ReleaseMutex();
         }
+//EXIT
+
         //Console.WriteLine($"Clerk [{_id}] putting book [{t_book.BookId}] on the counter");
 
-        using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew)){
+//CRITICAL SECTION
+        using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
+        {
             //Console.WriteLine($"CLERK [{_id}] waiting to acquire the counter mutex.");
             mutex.WaitOne();
             Console.WriteLine($"CLERK [{_id}] entered the counter matrix.");
@@ -93,25 +97,37 @@ public class Clerk
             //the clerk will take a nap for overworking
             Console.WriteLine($"CLERK [{_id}] releasing the counter mutex.");
             mutex.ReleaseMutex();
-        }        
+        }   
+//EXIT     
+//Notify??
 
         //the clerk will wait for a book in the dropoff
 //CRITICAL SECTION
-        t_book = Program.dropoff.FirstOrDefault();
-
-        Program.dropoff.RemoveFirst();
+//Get notified???
+        using (Mutex mutex = new Mutex(false, Program.dropoffMutex, out bool createdNew))
+        {
+            mutex.WaitOne();
+            t_book = Program.dropoff.FirstOrDefault();
+            Program.dropoff.RemoveFirst();
+            mutex.ReleaseMutex();
+        }
 //EXIT
         //the clerk will check the book in the records
         Console.WriteLine($"Clerk [{_id}] is checking in the book [{t_book.BookId}] in the records");
 //CRITICAL SECTION
-        foreach (BookRecord record in _records)
+        using (Mutex mutex = new Mutex(false, Program.recordMutex, out bool createdNew))
         {
-            if (record.Book.BookId == t_book.BookId)
+            mutex.WaitOne();
+            foreach (BookRecord record in _records)
             {
-                record.IsBorrowed = false;
+                if (record.Book.BookId == t_book.BookId)
+                {
+                    record.IsBorrowed = false;
 
-                break;
+                    break;
+                }
             }
+            mutex.ReleaseMutex();
         }
 //EXIT
     }
