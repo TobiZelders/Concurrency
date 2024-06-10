@@ -76,12 +76,14 @@ namespace booksforall
         {
             //a huge load of books arrives to the library, all at once.
             //init the books
+//CRITICAL SECTION???
             for (int i = 0; i < n_books; i++)
             {
                 Book book = new Book(i);    //books are all different
                 dropoff.AddLast(book);      //we load the books in the dropoff just
                                             // for easy access of the clerks
             }
+///
         }
         public static void InitCustomers() // feel free to alter this method if needed
 //INITIEER HIER THREADS
@@ -114,6 +116,8 @@ namespace booksforall
         public static void StartCustomers() // feel free to alter this method if needed
         {
             //start the customers
+            for(int i = 0; i < customers.Length; i++)
+                CustomerThreads.ElementAt(i).Start();
         }
 
     }

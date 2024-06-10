@@ -65,12 +65,12 @@ public class Clerk
         {
 //            Console.WriteLine($"CLERK [{_id}] waiting to acquire the record mutex.");
             mutex.WaitOne();
-            Console.WriteLine($"CLERK [{_id}] entered the record matrix.");
+            Console.WriteLine($"CLERK [{_id}] entered the record mutex.");
 
             foreach (var record in _records)    // the clerk will look in the records
                                                 // for a book that is not yet borrowed
             {
-                System.Console.WriteLine(record.Book.BookId + $"of clerk: {_id}");
+                //System.Console.WriteLine(record.Book.BookId + $"of clerk: {_id}");
                 if (record.IsBorrowed == false){
                     t_book = record.Book;
                     record.IsBorrowed = true;
@@ -96,14 +96,14 @@ public class Clerk
         }        
 
         //the clerk will wait for a book in the dropoff
-
+//CRITICAL SECTION
         t_book = Program.dropoff.FirstOrDefault();
 
         Program.dropoff.RemoveFirst();
-
+//EXIT
         //the clerk will check the book in the records
         Console.WriteLine($"Clerk [{_id}] is checking in the book [{t_book.BookId}] in the records");
-        
+//CRITICAL SECTION
         foreach (BookRecord record in _records)
         {
             if (record.Book.BookId == t_book.BookId)
@@ -113,6 +113,7 @@ public class Clerk
                 break;
             }
         }
+//EXIT
     }
 }
 
