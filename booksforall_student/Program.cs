@@ -12,7 +12,8 @@ namespace booksforall
         public const string recordMutex = "Global\\recordMutex";
         public const string counterMutex = "Global\\counterMutex";
         public const string dropoffMutex = "Global\\dropoffMutex";
-
+        public static SemaphoreSlim counterSemaphore = new SemaphoreSlim(0, 1);
+        public static SemaphoreSlim dropoffSemaphore = new SemaphoreSlim(0, 1);
         private static readonly string studentname1 = "Daniel Jong";   //name and surname of the student1
         private static readonly string studentnum1 = "0997226";    //student number
         private static readonly string studentname2 = "Tobias Zelders";   //name and surname of the student2
@@ -28,7 +29,7 @@ namespace booksforall
         public static LinkedList<Book> counter = new();
         public static LinkedList<Book> dropoff = new();
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)//CHANGE BACK TO ORIGINAL FORM!!!! Task was void
         {
             Console.WriteLine("Hello, we are starting our new pickup LIBRARY!");
             InitLibrary(); //do not alter this method
@@ -52,7 +53,8 @@ namespace booksforall
             // DO NOT CHANGE THE CODE ABOVE
             // use the space below to add your code if needed
 
-
+            foreach(Thread thread in CustomerThreads) thread.Join();
+            foreach(Thread thread in ClerkThreads) thread.Join();
 
             // DO NOT CHANGE THE CODE BELOW
             //the library is closing, DO NOT ALTER the following lines

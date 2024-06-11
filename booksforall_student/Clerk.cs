@@ -98,6 +98,7 @@ public class Clerk
             Console.WriteLine($"CLERK [{_id}] releasing the counter mutex.");
             mutex.ReleaseMutex();
         }   
+        Program.counterSemaphore.Release(); //Now Customer should be able to enter
 //EXIT     
 //Notify??
 
@@ -106,6 +107,7 @@ public class Clerk
 //Get notified???
         using (Mutex mutex = new Mutex(false, Program.dropoffMutex, out bool createdNew))
         {
+            Program.dropoffSemaphore.Wait(); //Gets notified when item is added
             mutex.WaitOne();
             t_book = Program.dropoff.FirstOrDefault();
             Program.dropoff.RemoveFirst();

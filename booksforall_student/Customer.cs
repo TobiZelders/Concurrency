@@ -31,6 +31,7 @@ public class Customer
 //CRITICAL SECTION
     using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
     {
+        Program.counterSemaphore.Wait(); //Gets notified when item is added
         mutex.WaitOne();
         _currentBook = Program.counter.First();
         Program.counter.RemoveFirst();
@@ -49,6 +50,7 @@ public class Customer
         Program.dropoff.AddFirst(_currentBook);
         mutex.ReleaseMutex();
     }
+    Program.dropoffSemaphore.Release(); //Now Clerk should be able to go to dropoff & doWork
 //EXIT
         _currentBook = null;
 
