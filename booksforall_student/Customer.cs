@@ -32,10 +32,13 @@ public class Customer
     using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
     {
         Program.counterSemaphore.Wait(); //Gets notified when item is added
+        Console.WriteLine($"CUSTOMER [{_id}] entering the counter SEMAPHORE.");
         mutex.WaitOne();
+        Console.WriteLine($"CUSTOMER [{_id}] entering the counter mutex.");
         _currentBook = Program.counter.First();
         Program.counter.RemoveFirst();
-        Console.WriteLine($"Customer {_id} is about to read the book {_currentBook.BookId}");
+        //Console.WriteLine($"Customer {_id} is about to read the book {_currentBook.BookId}");
+        Console.WriteLine($"CUSTOMER [{_id}] releasing the counter mutex.");
         mutex.ReleaseMutex();
     }
 //EXIT
@@ -43,18 +46,21 @@ public class Customer
         Thread.Sleep(new Random().Next(100, 500));
 //CRITICAL SECTION
         //the customer will return the book to the dropoff
-    using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
+    using (Mutex mutex = new Mutex(false, Program.dropoffMutex, out bool createdNew)) //was counter BUG?
     {
         mutex.WaitOne();
-        Console.WriteLine($"Customer {_id} is dropping off the book {_currentBook.BookId}");
+        Console.WriteLine($"CUSTOMER [{_id}] entering the dropoff mutex.");
+        //Console.WriteLine($"Customer {_id} is dropping off the book {_currentBook.BookId}");
         Program.dropoff.AddFirst(_currentBook);
+        Console.WriteLine($"CUSTOMER [{_id}] releasing the dropoff mutex.");
         mutex.ReleaseMutex();
     }
-    Program.dropoffSemaphore.Release(); //Now Clerk should be able to go to dropoff & doWork
+    Console.WriteLine($"CUSTOMER [{_id}] releasing the dropoff SEMAPHORE mutex.");
+    Program.dropoffSemaphore.Release(); //Now Clerk should be able to go to dropoff & doWork !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //EXIT
         _currentBook = null;
 
-        Console.WriteLine($"Customer {_id} is leaving the library");
+        //Console.WriteLine($"Customer {_id} is leaving the library");
 //CW NIET IN LOCK!!!!!!!!!
     }
 }

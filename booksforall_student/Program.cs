@@ -5,7 +5,7 @@ namespace booksforall
     internal class Program
     {
         //feel free to change the following values and if needed add variables
-        public static int n_threads = 5;// feel free to change this value
+        public static int n_threads = 18;// feel free to change this value
 
         private static List<Thread> CustomerThreads = new List<Thread>();
         private static List<Thread> ClerkThreads = new List<Thread>();
