@@ -1,4 +1,3 @@
-
 namespace booksforall;
 public class Clerk
 {
@@ -56,52 +55,69 @@ public class Clerk
                             //  but DO NOT remove the existing one
                             // do not alter the order of the instructions.
     {
+
         //the clerk will put the book in the counter
         // find an available book, but do not remove it from the original records
         Console.WriteLine($"Clerk [{_id}] is going to check in the records for a book to put on the counter");
 
         Book? t_book = null;
-        
-        foreach (var record in _records)    // the clerk will look in the records
-                                            // for a book that is not yet borrowed
+
+        using (Mutex mutex = new Mutex(false, Program.recordMutex, out bool createdNew))
         {
-
-            if (record.IsBorrowed == false)
+            mutex.WaitOne();
+            foreach (var record in _records)    // the clerk will look in the records
+                                                // for a book that is not yet borrowed
             {
-                t_book = record.Book;
-                
-                record.IsBorrowed = true;
-                
-                break;
+                if (record.IsBorrowed == false){
+                    t_book = record.Book;
+                    record.IsBorrowed = true;
+                    break;      
+                }
             }
-
+            mutex.ReleaseMutex();
         }
+
         Console.WriteLine($"Clerk [{_id}] putting book [{t_book.BookId}] on the counter");
 
-
-        Program.counter.AddFirst(t_book);
-        // the clerk will put the book on the counter for the customer
+        using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
+        {
+            mutex.WaitOne();
+            Program.counter.AddFirst(t_book);
+            // the clerk will put the book on the counter for the customer
+            mutex.ReleaseMutex();
+            Program.counterConsumerSemaphore.Release();
+        }   
 
         Thread.Sleep(new Random().Next(100, 500));
         //the clerk will take a nap for overworking
 
-        //the clerk will wait for a book in the dropoff
 
-        t_book = Program.dropoff.First();
-
-        Program.dropoff.RemoveFirst();
+        using (Mutex mutex = new Mutex(false, Program.dropoffMutex, out bool createdNew))
+        {
+            //the clerk will wait for a book in the dropoff
+            Program.dropoffConsumerSemaphore.Wait();
+            mutex.WaitOne();
+            t_book = Program.dropoff.FirstOrDefault();
+            Program.dropoff.RemoveFirst();
+            mutex.ReleaseMutex();
+        }
 
         //the clerk will check the book in the records
         Console.WriteLine($"Clerk [{_id}] is checking in the book [{t_book.BookId}] in the records");
-        
-        foreach (BookRecord record in _records)
-        {
-            if (record.Book.BookId == t_book.BookId)
-            {
-                record.IsBorrowed = false;
 
-                break;
+        using (Mutex mutex = new Mutex(false, Program.recordMutex, out bool createdNew))
+        {
+            mutex.WaitOne();
+            foreach (BookRecord record in _records)
+            {
+                if (record.Book.BookId == t_book.BookId)
+                {
+                    record.IsBorrowed = false;
+
+                    break;
+                }
             }
+            mutex.ReleaseMutex();
         }
     }
 }

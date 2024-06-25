@@ -5,8 +5,15 @@ namespace booksforall
     internal class Program
     {
         //feel free to change the following values and if needed add variables
-        public static int n_threads = 1000;// feel free to change this value
+        public static int n_threads = 500000;// feel free to change this value
 
+        private static List<Thread> CustomerThreads = new List<Thread>();
+        private static List<Thread> ClerkThreads = new List<Thread>();
+        public const string recordMutex = "Global\\recordMutex";
+        public const string counterMutex = "Global\\counterMutex";
+        public const string dropoffMutex = "Global\\dropoffMutex";
+        public static SemaphoreSlim counterConsumerSemaphore = new SemaphoreSlim(0, n_threads);
+        public static SemaphoreSlim dropoffConsumerSemaphore = new SemaphoreSlim(0, n_threads);
         private static readonly string studentname1 = "Daniel Jong";   //name and surname of the student1
         private static readonly string studentnum1 = "0997226";    //student number
         private static readonly string studentname2 = "Tobias Zelders";   //name and surname of the student2
@@ -39,14 +46,16 @@ namespace booksforall
             dropoff.Clear(); //do not alter this line
 
             //start the clerks
-            StartClerks(); //do not alter this call
+            StartClerks();//do not alter this call
 
             //start the customers
-            StartCustomers(); //do not alter this call
+            StartCustomers();//do not alter this call
+
             // DO NOT CHANGE THE CODE ABOVE
             // use the space below to add your code if needed
 
-
+            foreach(Thread thread in CustomerThreads) thread.Join();
+            foreach(Thread thread in ClerkThreads) thread.Join();
 
             // DO NOT CHANGE THE CODE BELOW
             //the library is closing, DO NOT ALTER the following lines
@@ -81,20 +90,34 @@ namespace booksforall
         public static void InitCustomers() // feel free to alter this method if needed
         {
             //init the customers
-
+            for (int i = 0; i < customers.Length; i++){
+                int index = i;
+                customers[index] = new Customer(index);
+                Thread t = new Thread (() => {customers[index].DoWork(); });
+                CustomerThreads.Add(t);
+            }
         }
         public static void InitClerks() // feel free to alter this method if needed
         {
             //init the clerks
-
+            for (int i = 0; i < clerks.Length; i++){
+                int index = i;
+                clerks[index] = new Clerk(index);
+                Thread t = new Thread (() => {clerks[index].DoWork(); });
+                ClerkThreads.Add(t);
+            }
         }
         public static void StartClerks() // feel free to alter this method if needed
         {
             //start the clerks
+            for(int i = 0; i < clerks.Length; i++)
+                ClerkThreads.ElementAt(i).Start();
         }
         public static void StartCustomers() // feel free to alter this method if needed
         {
             //start the customers
+            for(int i = 0; i < customers.Length; i++)
+                CustomerThreads.ElementAt(i).Start();
         }
 
     }
