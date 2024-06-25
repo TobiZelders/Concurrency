@@ -12,9 +12,9 @@ namespace booksforall
         public const string recordMutex = "Global\\recordMutex";
         public const string counterMutex = "Global\\counterMutex";
         public const string dropoffMutex = "Global\\dropoffMutex";
-        public static SemaphoreSlim counterProducerSemaphore = new SemaphoreSlim(1, n_threads);
+        //public static SemaphoreSlim counterProducerSemaphore = new SemaphoreSlim(1, 1);
         public static SemaphoreSlim counterConsumerSemaphore = new SemaphoreSlim(0, n_threads);
-        public static SemaphoreSlim dropoffProducerSemaphore = new SemaphoreSlim(1, n_threads);
+        //public static SemaphoreSlim dropoffProducerSemaphore = new SemaphoreSlim(1, 1);
         public static SemaphoreSlim dropoffConsumerSemaphore = new SemaphoreSlim(0, n_threads);
         private static readonly string studentname1 = "Daniel Jong";   //name and surname of the student1
         private static readonly string studentnum1 = "0997226";    //student number

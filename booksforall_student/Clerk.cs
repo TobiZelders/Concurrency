@@ -77,6 +77,7 @@ public class Clerk
                     break;      
                 }
             }
+            //Thread.Sleep(new Random().Next(100, 500));//VERWIJDEREN
             Console.WriteLine($"CLERK [{_id}] releasing the RECORD mutex w book [{t_book.BookId}].");
             mutex.ReleaseMutex();
         }
@@ -88,8 +89,8 @@ public class Clerk
         using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
         {
             //Console.WriteLine($"CLERK [{_id}] waiting to acquire the counter mutex.");
-            Program.counterProducerSemaphore.Wait();
-            //mutex.WaitOne();
+            //Program.counterProducerSemaphore.Wait();
+            mutex.WaitOne();
             Program.counter.AddFirst(t_book);
             Console.WriteLine($"CLERK [{_id}] puts book [{t_book.BookId}] on COUNTER.");
             // the clerk will put the book on the counter for the customer
@@ -97,8 +98,9 @@ public class Clerk
             Thread.Sleep(new Random().Next(100, 500));
             //the clerk will take a nap for overworking
             //Console.WriteLine($"CLERK [{_id}] releasing the counter mutex.");
-            //mutex.ReleaseMutex();
+            mutex.ReleaseMutex();
             Program.counterConsumerSemaphore.Release();
+            //Program.counterProducerSemaphore.Release();
         }   
         //Console.WriteLine($"CLERK [{_id}] releasing the counter SEMAPHORE.");
         //Program.counterSemaphore.Release(); //Now Customer should be able to enter
@@ -112,14 +114,14 @@ public class Clerk
         {
             Program.dropoffConsumerSemaphore.Wait(); //Gets notified when item is added
             //Console.WriteLine($"CLERK [{_id}] entering the dropoff SEMAPHORE.");
-            //mutex.WaitOne();
+            mutex.WaitOne();
             //Console.WriteLine($"CLERK [{_id}] entering the dropoff mutex.");
             t_book = Program.dropoff.FirstOrDefault();
             Program.dropoff.RemoveFirst();
             Console.WriteLine($"CLERK [{_id}] gets book [{t_book.BookId}] from DROPOFF.");
             //Console.WriteLine($"CLERK [{_id}] releasing the dropoff mutex.");
-            //mutex.ReleaseMutex();
-            Program.dropoffProducerSemaphore.Release();
+            mutex.ReleaseMutex();
+            //Program.dropoffProducerSemaphore.Release();
         }
 //EXIT
         //the clerk will check the book in the records
