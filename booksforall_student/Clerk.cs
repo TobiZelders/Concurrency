@@ -5,7 +5,9 @@ public class Clerk
 
     // this is where we store the records of books borrowed and returned
     // only the clerk can access this list
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private static LinkedList<BookRecord> _records; //do not alter this line
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private int _id;
 
     public Clerk(int clerkId) // feel free to change this constructor
@@ -63,9 +65,7 @@ public class Clerk
 //CRITICAL SECTION
         using (Mutex mutex = new Mutex(false, Program.recordMutex, out bool createdNew))
         {
-//            Console.WriteLine($"CLERK [{_id}] waiting to acquire the record mutex.");
             mutex.WaitOne();
-            Console.WriteLine($"CLERK [{_id}] entered the record mutex.");
 
             foreach (var record in _records)    // the clerk will look in the records
                                                 // for a book that is not yet borrowed
@@ -77,7 +77,6 @@ public class Clerk
                     break;      
                 }
             }
-            Console.WriteLine($"CLERK [{_id}] releasing the record mutex.");
             mutex.ReleaseMutex();
         }
 //EXIT
@@ -87,15 +86,16 @@ public class Clerk
 //CRITICAL SECTION
         using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
         {
-            //Console.WriteLine($"CLERK [{_id}] waiting to acquire the counter mutex.");
             mutex.WaitOne();
-            Console.WriteLine($"CLERK [{_id}] entered the counter matrix.");
+
+            System.Console.WriteLine($"         CLERK [{_id}] putting book - {t_book.BookId} - in COUNTER");
             Program.counter.AddFirst(t_book);
+
             // the clerk will put the book on the counter for the customer
 //Thread SLeep in Critical Section???
             Thread.Sleep(new Random().Next(100, 500));
             //the clerk will take a nap for overworking
-            Console.WriteLine($"CLERK [{_id}] releasing the counter mutex.");
+
             mutex.ReleaseMutex();
         }   
         Program.counterSemaphore.Release(); //Now Customer should be able to enter
@@ -110,12 +110,13 @@ public class Clerk
             Program.dropoffSemaphore.Wait(); //Gets notified when item is added
             mutex.WaitOne();
             t_book = Program.dropoff.FirstOrDefault();
+            System.Console.WriteLine($"         CLERK [{_id}] grabbing book - {t_book.BookId} - from DROPOFF");
             Program.dropoff.RemoveFirst();
             mutex.ReleaseMutex();
         }
 //EXIT
         //the clerk will check the book in the records
-        Console.WriteLine($"Clerk [{_id}] is checking in the book [{t_book.BookId}] in the records");
+        //Console.WriteLine($"Clerk [{_id}] is checking in the book [{t_book.BookId}] in the records");
 //CRITICAL SECTION
         using (Mutex mutex = new Mutex(false, Program.recordMutex, out bool createdNew))
         {

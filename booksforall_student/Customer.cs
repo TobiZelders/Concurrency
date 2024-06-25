@@ -29,28 +29,28 @@ public class Customer
         // the customer picks up a book that he requested
 //GETS SIGNALED
 //CRITICAL SECTION
-    using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
-    {
-        Program.counterSemaphore.Wait(); //Gets notified when item is added
-        mutex.WaitOne();
-        _currentBook = Program.counter.First();
-        Program.counter.RemoveFirst();
-        Console.WriteLine($"Customer {_id} is about to read the book {_currentBook.BookId}");
-        mutex.ReleaseMutex();
-    }
+        using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
+        {
+            Program.counterSemaphore.Wait(); //Gets notified when item is added
+            mutex.WaitOne();
+            _currentBook = Program.counter.First();
+            Program.counter.RemoveFirst();
+            Console.WriteLine($"Customer {_id} is about to read the book {_currentBook.BookId}");
+            mutex.ReleaseMutex();
+        }
 //EXIT
         // the customer will take the book to read
         Thread.Sleep(new Random().Next(100, 500));
 //CRITICAL SECTION
         //the customer will return the book to the dropoff
-    using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
-    {
-        mutex.WaitOne();
-        Console.WriteLine($"Customer {_id} is dropping off the book {_currentBook.BookId}");
-        Program.dropoff.AddFirst(_currentBook);
-        mutex.ReleaseMutex();
-    }
-    Program.dropoffSemaphore.Release(); //Now Clerk should be able to go to dropoff & doWork
+        using (Mutex mutex = new Mutex(false, Program.dropoffMutex, out bool createdNew))
+        {
+            mutex.WaitOne();
+            Console.WriteLine($"Customer {_id} is dropping off the book {_currentBook.BookId}");
+            Program.dropoff.AddFirst(_currentBook);
+            mutex.ReleaseMutex();
+        }
+        Program.dropoffSemaphore.Release(); //Now Clerk should be able to go to dropoff & doWork
 //EXIT
         _currentBook = null;
 
