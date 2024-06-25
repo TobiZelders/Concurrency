@@ -1,13 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "aij8VmFXhes=",
+  "dgSpecHash": "HcBs/2LtZnYh28a/1wJAecCq1AUeQ0KzkfotvfOQOcYaY93vn0uKVmBKJ/zjH7mDQ5KmxvxGy2ZhLfSYdV3v/w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\dkbj2\\Documents\\Eigen Documenten\\Studie\\Jaar 2.3\\OP4\\COC assignment\\GitHub\\Concurrency\\booksforall_student\\booksforall.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\dkbj2\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.31\\microsoft.netcore.app.ref.6.0.31.nupkg.sha512",
-    "C:\\Users\\dkbj2\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.31\\microsoft.windowsdesktop.app.ref.6.0.31.nupkg.sha512",
-    "C:\\Users\\dkbj2\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.31\\microsoft.aspnetcore.app.ref.6.0.31.nupkg.sha512",
-    "C:\\Users\\dkbj2\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.31\\microsoft.netcore.app.host.win-x64.6.0.31.nupkg.sha512"
-  ],
+  "projectFilePath": "C:\\Users\\tobiz\\Documents\\Github-2024\\Concurrency\\booksforall_student\\booksforall.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }

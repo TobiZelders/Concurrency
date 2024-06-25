@@ -94,7 +94,7 @@ public class Clerk
             Console.WriteLine($"CLERK [{_id}] puts book [{t_book.BookId}] on COUNTER.");
             // the clerk will put the book on the counter for the customer
 //Thread SLeep in Critical Section???
-            Thread.Sleep(new Random().Next(100, 500));
+
             //the clerk will take a nap for overworking
             //Console.WriteLine($"CLERK [{_id}] releasing the counter mutex.");
             //mutex.ReleaseMutex();
@@ -104,7 +104,7 @@ public class Clerk
         //Program.counterSemaphore.Release(); //Now Customer should be able to enter
 //EXIT     
 //Notify??
-
+            Thread.Sleep(new Random().Next(100, 500));
         //the clerk will wait for a book in the dropoff
 //CRITICAL SECTION
 //Get notified???
