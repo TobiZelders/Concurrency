@@ -5,16 +5,14 @@ namespace booksforall
     internal class Program
     {
         //feel free to change the following values and if needed add variables
-        public static int n_threads = 50;// feel free to change this value
+        public static int n_threads = 5000;// feel free to change this value
 
         private static List<Thread> CustomerThreads = new List<Thread>();
         private static List<Thread> ClerkThreads = new List<Thread>();
         public const string recordMutex = "Global\\recordMutex";
         public const string counterMutex = "Global\\counterMutex";
         public const string dropoffMutex = "Global\\dropoffMutex";
-        //public static SemaphoreSlim counterProducerSemaphore = new SemaphoreSlim(1, 1);
         public static SemaphoreSlim counterConsumerSemaphore = new SemaphoreSlim(0, n_threads);
-        //public static SemaphoreSlim dropoffProducerSemaphore = new SemaphoreSlim(1, 1);
         public static SemaphoreSlim dropoffConsumerSemaphore = new SemaphoreSlim(0, n_threads);
         private static readonly string studentname1 = "Daniel Jong";   //name and surname of the student1
         private static readonly string studentnum1 = "0997226";    //student number
@@ -31,7 +29,7 @@ namespace booksforall
         public static LinkedList<Book> counter = new();
         public static LinkedList<Book> dropoff = new();
 
-        static async Task Main(string[] args)//CHANGE BACK TO ORIGINAL FORM!!!! Task was void
+        static async Task Main(string[] args)
         {
             Console.WriteLine("Hello, we are starting our new pickup LIBRARY!");
             InitLibrary(); //do not alter this method
@@ -48,17 +46,18 @@ namespace booksforall
             dropoff.Clear(); //do not alter this line
 
             //start the clerks
-            StartClerks();
-            //do not alter this call
+            StartClerks();//do not alter this call
 
             //start the customers
-            StartCustomers();
-            
-            //do not alter this call
+            StartCustomers();//do not alter this call
+
             // DO NOT CHANGE THE CODE ABOVE
             // use the space below to add your code if needed
+
+            /**/
             foreach(Thread thread in CustomerThreads) thread.Join();
             foreach(Thread thread in ClerkThreads) thread.Join();
+
 
             // DO NOT CHANGE THE CODE BELOW
             //the library is closing, DO NOT ALTER the following lines
@@ -83,17 +82,14 @@ namespace booksforall
         {
             //a huge load of books arrives to the library, all at once.
             //init the books
-//CRITICAL SECTION???
             for (int i = 0; i < n_books; i++)
             {
                 Book book = new Book(i);    //books are all different
                 dropoff.AddLast(book);      //we load the books in the dropoff just
                                             // for easy access of the clerks
             }
-///
         }
         public static void InitCustomers() // feel free to alter this method if needed
-//INITIEER HIER THREADS
         {
             //init the customers
             for (int i = 0; i < customers.Length; i++){
@@ -104,7 +100,6 @@ namespace booksforall
             }
         }
         public static void InitClerks() // feel free to alter this method if needed
-//INITIEER HIER THREADS
         {
             //init the clerks
             for (int i = 0; i < clerks.Length; i++){
