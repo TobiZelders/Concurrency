@@ -45,7 +45,7 @@ public class Customer
     }
 //EXIT
         // the customer will take the book to read
-//        Thread.Sleep(new Random().Next(100, 500));
+        Thread.Sleep(new Random().Next(100, 500));
 //CRITICAL SECTION
         //the customer will return the book to the dropoff
     using (Mutex mutex = new Mutex(false, Program.dropoffMutex, out bool createdNew)) //was counter BUG?
