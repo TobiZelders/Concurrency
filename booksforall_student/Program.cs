@@ -5,7 +5,7 @@ namespace booksforall
     internal class Program
     {
         //feel free to change the following values and if needed add variables
-        public static int n_threads = 5000;// feel free to change this value
+        public static int n_threads = 500000;// feel free to change this value
 
         private static List<Thread> CustomerThreads = new List<Thread>();
         private static List<Thread> ClerkThreads = new List<Thread>();
@@ -29,7 +29,7 @@ namespace booksforall
         public static LinkedList<Book> counter = new();
         public static LinkedList<Book> dropoff = new();
 
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             Console.WriteLine("Hello, we are starting our new pickup LIBRARY!");
             InitLibrary(); //do not alter this method
@@ -54,10 +54,8 @@ namespace booksforall
             // DO NOT CHANGE THE CODE ABOVE
             // use the space below to add your code if needed
 
-            /**/
             foreach(Thread thread in CustomerThreads) thread.Join();
             foreach(Thread thread in ClerkThreads) thread.Join();
-
 
             // DO NOT CHANGE THE CODE BELOW
             //the library is closing, DO NOT ALTER the following lines
