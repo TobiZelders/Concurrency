@@ -65,7 +65,7 @@ public class Clerk
         {
 //            Console.WriteLine($"CLERK [{_id}] waiting to acquire the record mutex.");
             mutex.WaitOne();
-            Console.WriteLine($"CLERK [{_id}] entered the record mutex.");
+            //Console.WriteLine($"CLERK [{_id}] entered the record mutex.");
 
             foreach (var record in _records)    // the clerk will look in the records
                                                 // for a book that is not yet borrowed
@@ -77,7 +77,7 @@ public class Clerk
                     break;      
                 }
             }
-            Console.WriteLine($"CLERK [{_id}] releasing the record mutex.");
+            //Console.WriteLine($"CLERK [{_id}] releasing the record mutex.");
             mutex.ReleaseMutex();
         }
 //EXIT
@@ -88,18 +88,20 @@ public class Clerk
         using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
         {
             //Console.WriteLine($"CLERK [{_id}] waiting to acquire the counter mutex.");
-            mutex.WaitOne();
-            Console.WriteLine($"CLERK [{_id}] entered the counter matrix.");
+            Program.counterProducerSemaphore.Wait();
+            //mutex.WaitOne();
             Program.counter.AddFirst(t_book);
+            Console.WriteLine($"CLERK [{_id}] puts book [{t_book.BookId}] on COUNTER.");
             // the clerk will put the book on the counter for the customer
 //Thread SLeep in Critical Section???
-            Thread.Sleep(1/*new Random().Next(100, 500)*/);
+//            Thread.Sleep(new Random().Next(100, 500));
             //the clerk will take a nap for overworking
-            Console.WriteLine($"CLERK [{_id}] releasing the counter mutex.");
-            mutex.ReleaseMutex();
+            //Console.WriteLine($"CLERK [{_id}] releasing the counter mutex.");
+            //mutex.ReleaseMutex();
+            Program.counterConsumerSemaphore.Release();
         }   
-        Console.WriteLine($"CLERK [{_id}] releasing the counter SEMAPHORE.");
-        Program.counterSemaphore.Release(); //Now Customer should be able to enter
+        //Console.WriteLine($"CLERK [{_id}] releasing the counter SEMAPHORE.");
+        //Program.counterSemaphore.Release(); //Now Customer should be able to enter
 //EXIT     
 //Notify??
 
@@ -108,14 +110,16 @@ public class Clerk
 //Get notified???
         using (Mutex mutex = new Mutex(false, Program.dropoffMutex, out bool createdNew))
         {
-            Program.dropoffSemaphore.Wait(); //Gets notified when item is added
-            Console.WriteLine($"CLERK [{_id}] entering the dropoff SEMAPHORE.");
-            mutex.WaitOne();
-            Console.WriteLine($"CLERK [{_id}] entering the dropoff mutex.");
+            Program.dropoffConsumerSemaphore.Wait(); //Gets notified when item is added
+            //Console.WriteLine($"CLERK [{_id}] entering the dropoff SEMAPHORE.");
+            //mutex.WaitOne();
+            //Console.WriteLine($"CLERK [{_id}] entering the dropoff mutex.");
             t_book = Program.dropoff.FirstOrDefault();
             Program.dropoff.RemoveFirst();
-            Console.WriteLine($"CLERK [{_id}] releasing the dropoff mutex.");
-            mutex.ReleaseMutex();
+            Console.WriteLine($"CLERK [{_id}] gets book [{t_book.BookId}] from DROPOFF.");
+            //Console.WriteLine($"CLERK [{_id}] releasing the dropoff mutex.");
+            //mutex.ReleaseMutex();
+            Program.dropoffProducerSemaphore.Release();
         }
 //EXIT
         //the clerk will check the book in the records
@@ -124,7 +128,7 @@ public class Clerk
         using (Mutex mutex = new Mutex(false, Program.recordMutex, out bool createdNew))
         {
             mutex.WaitOne();
-            Console.WriteLine($"CLERK [{_id}] entering the record mutex.");
+            //Console.WriteLine($"CLERK [{_id}] entering the record mutex.");
             foreach (BookRecord record in _records)
             {
                 if (record.Book.BookId == t_book.BookId)
@@ -134,7 +138,7 @@ public class Clerk
                     break;
                 }
             }
-            Console.WriteLine($"CLERK [{_id}] releasingthe record mutex.");
+            //Console.WriteLine($"CLERK [{_id}] releasingthe record mutex.");
             mutex.ReleaseMutex();
         }
 //EXIT
