@@ -31,9 +31,11 @@ public class Customer
 //CRITICAL SECTION
     using (Mutex mutex = new Mutex(false, Program.counterMutex, out bool createdNew))
     {
-        Program.counterConsumerSemaphore.Wait(); //Gets notified when item is added
-        //Console.WriteLine($"CUSTOMER [{_id}] entering the counter SEMAPHORE.");
+         //Gets notified when item is added
+        Console.WriteLine($"CUSTOMER [{_id}] entering the counter SEMAPHORE.");
+        Program.counterConsumerSemaphore.Wait();
         mutex.WaitOne();
+
         //Console.WriteLine($"CUSTOMER [{_id}] entering the counter mutex.");
         _currentBook = Program.counter.First();
         Program.counter.RemoveFirst();
@@ -45,7 +47,7 @@ public class Customer
     }
 //EXIT
         // the customer will take the book to read
-        Thread.Sleep(new Random().Next(100, 500));
+       Thread.Sleep(new Random().Next(100, 500));
 //CRITICAL SECTION
         //the customer will return the book to the dropoff
     using (Mutex mutex = new Mutex(false, Program.dropoffMutex, out bool createdNew)) //was counter BUG?
@@ -56,6 +58,7 @@ public class Customer
         //Console.WriteLine($"Customer {_id} is dropping off the book {_currentBook.BookId}");
         Program.dropoff.AddFirst(_currentBook);
         Console.WriteLine($"CUSTOMER [{_id}] puts book [{_currentBook.BookId}] on DROPOFF.");
+
         //Console.WriteLine($"CUSTOMER [{_id}] releasing the dropoff mutex.");
         mutex.ReleaseMutex();
         Program.dropoffConsumerSemaphore.Release();
