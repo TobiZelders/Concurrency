@@ -5,7 +5,7 @@ namespace booksforall
     internal class Program
     {
         //feel free to change the following values and if needed add variables
-        public static int n_threads = 300;// feel free to change this value
+        public static int n_threads = 50;// feel free to change this value
 
         private static List<Thread> CustomerThreads = new List<Thread>();
         private static List<Thread> ClerkThreads = new List<Thread>();
@@ -48,13 +48,15 @@ namespace booksforall
             dropoff.Clear(); //do not alter this line
 
             //start the clerks
-            StartClerks(); //do not alter this call
+            StartClerks();
+            //do not alter this call
 
             //start the customers
-            StartCustomers(); //do not alter this call
+            StartCustomers();
+            
+            //do not alter this call
             // DO NOT CHANGE THE CODE ABOVE
             // use the space below to add your code if needed
-
             foreach(Thread thread in CustomerThreads) thread.Join();
             foreach(Thread thread in ClerkThreads) thread.Join();
 
